@@ -72,30 +72,15 @@ Here’s a step-by-step guide to install Node.js version 20 or above on **macOS*
 ---
 
 ### **3. Windows**
-#### Option 1: Using the Installer
+#### Using the Installer
 1. **Download Node.js Installer**:
-   - Visit the [Node.js Downloads Page](https://nodejs.org/).
+   - Visit the [Node.js Downloads Page]([https://nodejs.org/](https://nodejs.org/en/download/prebuilt-installer)).
    - Download the latest Node.js 20.x LTS or Current version for Windows.
 2. **Run the Installer**:
    - Follow the installation prompts.
    - Ensure you check the option to install **npm**.
 3. **Verify Installation**:
    Open Command Prompt and run:
-   ```cmd
-   node -v
-   npm -v
-   ```
-
-#### Option 2: Using NVM for Windows
-1. **Install NVM for Windows**:
-   - Download the latest [NVM for Windows release](https://github.com/coreybutler/nvm-windows/releases).
-   - Follow the installation instructions.
-2. **Install Node.js**:
-   ```cmd
-   nvm install 20
-   nvm use 20
-   ```
-3. **Verify Installation**:
    ```cmd
    node -v
    npm -v
