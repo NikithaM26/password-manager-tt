@@ -63,6 +63,108 @@ document
     }
   });
 
+let currentDeleteLabel = null;
+
+// Show Delete Modal
+function showDeleteModal(label) {
+  currentDeleteLabel = label;
+  document.getElementById(
+    "deleteLabelText"
+  ).textContent = `Are you sure you want to delete "${label}"?`;
+  document.getElementById("deleteModal").classList.remove("hidden");
+}
+
+// Close Delete Modal
+function closeDeleteModal() {
+  document.getElementById("deleteModal").classList.add("hidden");
+  currentDeleteLabel = null;
+}
+
+// Confirm Delete Password
+async function confirmDeletePassword() {
+  try {
+    const response = await fetch(
+      `${API_BASE}/delete-password/${currentDeleteLabel}`,
+      { method: "DELETE" }
+    );
+    if (response.ok) {
+      showSnackbar("Password deleted successfully.");
+      loadLabels();
+    } else {
+      const error = await response.json();
+      showSnackbar(error.message || "Error deleting password.", true);
+    }
+  } catch (err) {
+    console.error("Error:", err);
+    showSnackbar("Failed to delete password.", true);
+  } finally {
+    closeDeleteModal();
+  }
+}
+
+// Attach Event Listeners for Delete Modal
+document
+  .getElementById("cancelDelete")
+  .addEventListener("click", closeDeleteModal);
+document
+  .getElementById("confirmDelete")
+  .addEventListener("click", confirmDeletePassword);
+
+// Global Variable to Store Current Label
+let currentEditLabel = null;
+
+function showEditModal(label) {
+  currentEditLabel = label;
+  document.getElementById("editLabel").value = label;
+  document.getElementById("editPassword").value = "";
+  document.getElementById("editModal").classList.remove("hidden");
+}
+
+function closeEditModal() {
+  document.getElementById("editModal").classList.add("hidden");
+  currentEditLabel = null;
+}
+
+// Handle Edit Password Form Submission
+document
+  .getElementById("editPasswordForm")
+  .addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const newPassword = document.getElementById("editPassword").value.trim();
+    if (!newPassword) {
+      showSnackbar("New password is required!", true);
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${API_BASE}/update-password/${currentEditLabel}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ newPassword }),
+        }
+      );
+
+      if (response.ok) {
+        showSnackbar("Password updated successfully.");
+        loadLabels();
+        closeEditModal();
+      } else {
+        const error = await response.json();
+        showSnackbar(error.message || "Error updating password.", true);
+      }
+    } catch (err) {
+      console.error("Error:", err);
+      showSnackbar("Failed to update password.", true);
+    }
+  });
+
+document
+  .getElementById("closeEditModal")
+  .addEventListener("click", closeEditModal);
+
 async function loadLabels() {
   try {
     const response = await fetch(`${API_BASE}/list-labels`);
@@ -79,6 +181,16 @@ async function loadLabels() {
                         class="bg-blue-500 text-white py-1 px-2 rounded hover:bg-blue-600 mr-2"
                         onclick="getPassword('${label}')">
                         View
+                    </button>
+                    <button 
+                        class="bg-yellow-500 text-white py-1 px-2 rounded hover:bg-yellow-600 mr-2"
+                        onclick="showEditModal('${label}')">
+                        Edit
+                    </button>
+                    <button 
+                        class="bg-red-500 text-white py-1 px-2 rounded hover:bg-red-600"
+                        onclick="showDeleteModal('${label}')">
+                        Delete
                     </button>
                 </div>
             </div>
