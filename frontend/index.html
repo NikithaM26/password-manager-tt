@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="max-w-lg w-full bg-white p-8 rounded-lg shadow-md relative">
+        <h1 class="text-2xl font-bold text-center mb-6">Password Manager</h1>
+
+        <!-- Add Password Form -->
+        <form id="addPasswordForm" class="mb-6">
+            <input type="text" id="label" placeholder="Service/Label (e.g., Gmail)" 
+                   class="w-full p-3 border border-gray-300 rounded mb-3" required>
+            <input type="password" id="password" placeholder="Password" 
+                   class="w-full p-3 border border-gray-300 rounded mb-3" required>
+            <button type="submit" 
+                    class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 w-full">
+                Save Password
+            </button>
+        </form>
+
+        <!-- List of Passwords -->
+        <h2 class="text-xl font-semibold mb-4">Saved Labels</h2>
+        <div id="labelsList" class="text-gray-700 space-y-2"></div>
+
+        <!-- Snackbar for Notifications -->
+        <div id="snackbar" class="hidden fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white py-2 px-4 rounded shadow"></div>
+
+        <!-- Modal for Showing Password -->
+        <div id="passwordModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div class="bg-white p-6 rounded-lg shadow-md max-w-sm w-full">
+                <h3 class="text-lg font-bold mb-4">Password</h3>
+                <p id="modalPassword" class="text-gray-700 text-center mb-6"></p>
+                <button id="closeModal" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 w-full">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="./js/app.js"></script>
+</body>
+</html>
