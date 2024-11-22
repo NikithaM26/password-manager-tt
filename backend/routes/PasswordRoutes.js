@@ -64,4 +64,46 @@ router.get('/list-labels', async (req, res) => {
     }
 });
 
+// @route DELETE Password /delete-password/:label
+router.delete('/delete-password/:label', async (req, res) => {
+    const { label } = req.params;
+
+    try {
+        const result = await Password.deleteOne({ label });
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ message: 'Label not found' });
+        }
+        res.status(200).json({ message: 'Password deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+});
+
+// @route PUT Update Password /update-password/:label
+router.put('/update-password/:label', async (req, res) => {
+    const { label } = req.params;
+    const { newPassword } = req.body;
+
+    if (!newPassword) {
+        return res.status(400).json({ message: 'New password is required' });
+    }
+
+    try {
+        const encryptedPassword = encrypt(newPassword);
+        const updatedPassword = await Password.findOneAndUpdate(
+            { label },
+            { password: encryptedPassword },
+            { new: true }
+        );
+
+        if (!updatedPassword) {
+            return res.status(404).json({ message: 'Label not found' });
+        }
+
+        res.status(200).json({ message: 'Password updated successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+});
+
 module.exports = router;
